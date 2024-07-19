@@ -1,11 +1,9 @@
 'use client';
 
-import Image from "next/image";
 import { ConnectButton, MediaRenderer, TransactionButton, useActiveAccount, useReadContract } from "thirdweb/react";
-import thirdwebIcon from "@public/thirdweb.svg";
 import { client } from "./client";
 import { defineChain, getContract, toEther } from "thirdweb";
-import { sepolia } from "thirdweb/chains";
+import { arbitrum } from "thirdweb/chains";
 import { getContractMetadata } from "thirdweb/extensions/common";
 import { claimTo, getActiveClaimCondition, getTotalClaimedSupply, nextTokenIdToMint } from "thirdweb/extensions/erc721";
 import { useState } from "react";
@@ -14,7 +12,7 @@ export default function Home() {
   const account = useActiveAccount();
 
   // Replace the chain with the chain you want to connect to
-  const chain = defineChain( sepolia );
+  const chain = defineChain( arbitrum );
 
   const [quantity, setQuantity] = useState(1);
 
@@ -22,7 +20,7 @@ export default function Home() {
   const contract = getContract({
     client: client,
     chain: chain,
-    address: "0xBb1d78c8799b33c5791ED6e49B84429c7106759E"
+    address: "0xaDf72289edC9b3a3724377Fe9b095248fd6E451E"
   });
 
   const { data: contractMetadata, isLoading: isContractMetadataLaoding } = useReadContract( getContractMetadata,
@@ -76,7 +74,7 @@ export default function Home() {
             <p>Loading...</p>
           ) : (
             <p className="text-lg mt-2 font-bold">
-              Total NFT Supply: {claimedSupply?.toString()}/{totalNFTSupply?.toString()}
+              Total NFT Claimed: {claimedSupply?.toString()}/{totalNFTSupply?.toString()}
             </p>
           )}
           <div className="flex flex-row items-center justify-center my-4">
@@ -102,11 +100,11 @@ export default function Home() {
               quantity: BigInt(quantity),
             })}
             onTransactionConfirmed={async () => {
-              alert("NFT Claimed!");
+              alert("Successfully Minted 1 Dog!");
               setQuantity(1);
             }}
           >
-            {`Claim NFT (${getPrice(quantity)} ETH)`}
+            {`Mint Dogs (${getPrice(quantity)} ETH)`}
           </TransactionButton>
         </div>
       </div>
@@ -117,17 +115,8 @@ export default function Home() {
 function Header() {
   return (
     <header className="flex flex-row items-center">
-      <Image
-        src={thirdwebIcon}
-        alt=""
-        className="size-[150px] md:size-[150px]"
-        style={{
-          filter: "drop-shadow(0px 0px 24px #a726a9a8)",
-        }}
-      />
-
       <h1 className="text-2xl md:text-6xl font-semibold md:font-bold tracking-tighter mb-6 text-zinc-100">
-        NFT Claim App
+        
       </h1>
     </header>
   );
